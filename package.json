@@ -1,7 +1,7 @@
 {
   "name": "ngx-wow",
   "description": "Angular module for WOW.js.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "filename": "./src/ngx-wow.js",
   "homepage": "http://github.com/tinesoft/ngx-wow",
   "author": {
