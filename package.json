@@ -105,7 +105,7 @@
     "postcss": "6.0.13",
     "postcss-strip-inline-comments": "0.1.5",
     "raw-loader": "0.5.1",
-    "source-map-loader": "0.2.2",
+    "source-map-loader": "0.2.3",
     "travis-status": "2.0.0",
     "webpack": "3.8.1",
     "webpack-dev-middleware": "1.12.0",
