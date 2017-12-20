@@ -17,25 +17,54 @@ View all the directives in action at https://tinesoft.github.io/ngx-wow
 
 ## Dependencies
 * [Angular](https://angular.io) (*requires* Angular 2 or higher, tested with 2.0.0)
+* [WOW JS](http://mynameismatthieu.com/WOW/) (*requires* WOW JS 1.1 or higher, tested with 1.1.3)
+
 
 ## Installation
-Install above dependencies via *npm*. 
-
-Now install `ngx-wow` via:
+Install above dependencies via *npm*. In particular for `WOW JS`, run:
 ```shell
-npm install --save ngx-wow
+npm install --save wowjs
 ```
 
 ---
+##### Angular-CLI
+>**Note**: If you are using `angular-cli` to build your app, make sure that `wowjs` is properly listed as a [global library](https://github.com/angular/angular-cli#global-library-installation), by editing your `angular-cli.json` as such:
+```
+      "scripts": [
+        "../node_modules/wowjs/dist/wowjs.js"
+      ],
+```
+
 ##### SystemJS
 >**Note**:If you are using `SystemJS`, you should adjust your configuration to point to the UMD bundle.
 In your systemjs config file, `map` needs to tell the System loader where to look for `ngx-wow`:
 ```js
 map: {
-  'ngx-wow': 'node_modules/ngx-wow/bundles/ngx-wow.umd.js',
+  'ngx-wow': 'node_modules/ngx-wow/bundles/ngx-wow.min.js',
 }
 ```
+In your systemjs config file, `meta` needs to tell the System loader how to load `wowjs`:
+```js
+    meta: {
+    './node_modules/wowjs/dist/wow.js': {
+            format: 'amd'
+        }
+    }
+```
+In your index.html file, add script tag to load  `wowjs` globally:
+```html
+    <!-- 1. Configure SystemJS -->
+    <script src="system.config.js"></script>
+    <!-- 2. Add WOW dependency-->
+    <script src="node_modules/wowjs/dist/wow.js"></script>
+```
+
 ---
+
+Now install `ngx-wow` via:
+```shell
+npm install --save ngx-wow
+```
 
 Once installed you need to import the main module:
 ```js
