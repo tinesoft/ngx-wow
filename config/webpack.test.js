@@ -1,7 +1,7 @@
 const helpers = require('./helpers');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const {CheckerPlugin} = require('awesome-typescript-loader');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const getConfig = (hasCoverage, isTddMode) => {
 
@@ -50,7 +50,7 @@ const getConfig = (hasCoverage, isTddMode) => {
                         {
                             loader: 'awesome-typescript-loader',
                             options: {
-                                configFileName: helpers.root('src','tsconfig.spec.json'),
+                                configFileName: helpers.root('src', 'tsconfig.spec.json'),
                                 // use inline sourcemaps for "karma-remap-coverage" reporter (if coverage is activated)
                                 sourceMap: !hasCoverage,
                                 inlineSourceMap: hasCoverage,
@@ -65,15 +65,6 @@ const getConfig = (hasCoverage, isTddMode) => {
                         'angular2-template-loader'
                     ],
                     exclude: [/\.e2e\.ts$/]
-                },
-                {
-                    test: /\.css$/,
-                    loader: ['to-string-loader', 'css-loader']
-                },
-                {
-                  test: /\.(scss|sass)$/,
-                  use: ['to-string-loader', 'css-loader', 'sass-loader'],
-                  exclude: [helpers.root('src', 'scss')]
                 },
                 {
                     test: /\.html$/,
@@ -92,11 +83,11 @@ const getConfig = (hasCoverage, isTddMode) => {
             }),
             // Fixes linker warnings (see https://github.com/angular/angular/issues/11580)
             new ContextReplacementPlugin(
-              // The (\\|\/) piece accounts for path separators in *nix and Windows
-              /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-              helpers.root('src'), // location of your src
-              {} // a map of your routes
-            ),
+                // fixes WARNING Critical dependency: the request of a dependency is an expression
+                /(.+)?angular(\\|\/)core(.+)?/,
+                helpers.root('src'), // location of your src
+                {} // a map of your routes
+              ),
         ].concat(extraPlugins),
 
         performance: {

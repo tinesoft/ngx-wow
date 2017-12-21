@@ -1,11 +1,11 @@
 {
   "generator-ngx-library": {
-    "version": "4.3.0",
+    "version": "5.4.0",
     "authorName": "Tine Kondo",
     "authorEmail": "kondotine@gmail.com",
     "githubUsername": "tinesoft",
     "projectName": "ngx-wow",
-    "projectVersion": "0.0.1",
+    "projectVersion": "1.0.0",
     "projectDescription": "Angular module for WOW.js.",
     "projectKeywords": [
       "ng",
@@ -16,30 +16,30 @@
       "reveal",
       "animation"
     ],
-    "ngPrefix": "ngw",
     "ngVersion": "2.0.0",
     "ngModules": [
       "core",
       "common"
     ],
-    "useGreenkeeper": true,
+    "otherDependencies": ["wowjs"],
+    "dependenciesRange": ">=",
+    "ngPrefix": "ngw",
+    "useGreenkeeper": false,
     "useCompodoc": true,
     "enforceNgGitCommitMsg": true,
+    "skipDemo": false,
+    "skipSample": true,
+    "skipStyles": true,
     "exclusions": [
-      "src/module/component/lib.component.html",
-      "src/module/component/lib.component.spec.ts",
-      "src/module/component/lib.component.ts",
-      "src/module/component/lib.component.scss",
-      "src/module/service/lib.service.ts",
-      "src/module/service/lib.service.spec.ts",
-      "src/module/lib.module.ts",
-      "src/tsconfig.lib.es5.json",
-      "src/index.ts",
-      "demo/src/app/home/home.component.html",
-      "demo/src/app/home/home.component.scss",
-      "demo/src/app/home/home.module.ts",
+      "README.md",
+      "CHANGELOG.md",
+      "config/karma.conf",
+      "demo/src/app/**",
+      "demo/src/styles.scss",
+      "demo/src/assets/logo.svg",
+      "demo/src/index.html",
       "demo/src/favicon.ico",
-      "demo/src/styles.scss"
+      "src/**/*.*"
     ]
   }
 }

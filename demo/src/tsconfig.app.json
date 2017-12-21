@@ -4,7 +4,11 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
+    "types": [],
+    "paths": {
+      "@angular/*": ["../node_modules/@angular/*"],
+      "wowjs": ["../node_modules/wowjs"]
+    }
   },
   "exclude": [
     "testing/*",

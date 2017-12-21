@@ -5,8 +5,9 @@
   },
   "apps": [
     {
+      "name": "bsr",
       "root": "src",
-      "outDir": "dist",
+      "outDir": "dist/browser",
       "assets": [
         "assets",
         "favicon.ico"
@@ -27,13 +28,14 @@
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
+        "hmr": "environments/environment.hmr.ts",
         "prod": "environments/environment.prod.ts"
       }
     },
     {
       "name": "ssr",
       "root": "src",
-      "outDir": "dist-server",
+      "outDir": "dist/server",
       "assets": [
         "assets",
         "favicon.ico"
@@ -49,7 +51,7 @@
         "styles.scss"
       ],
       "scripts": [
-        "../node_modules/wowjs/dist/wow.min.js"
+        "../node_modules/wowjs/dist/wow.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

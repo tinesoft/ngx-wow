@@ -26,7 +26,7 @@ const gulpCoveralls = require('gulp-coveralls');
 const runSequence = require('run-sequence');
 
 /** To compile & bundle the library with Angular & Rollup */
-const ngc = (args) => {// Promesify version of the ngc compiler
+const ngc = (args) => {// Promisify version of the ngc compiler
   const project = args.p || args.project || '.';
   const cmd = helpers.root(helpers.binPath('ngc'));
   return helpers.execp(`${cmd} -p ${project}`);
@@ -39,13 +39,6 @@ const rollupCommonjs = require('rollup-plugin-commonjs');
 
 /** To load templates and styles in Angular components */
 const gulpInlineNgTemplate = require('gulp-inline-ng2-template');
-
-/** Sass style */
-const sass = require('node-sass');
-const cssnano = require('cssnano');
-const postcss = require('postcss');
-const autoprefixer = require('autoprefixer');
-const stripInlineComments = require('postcss-strip-inline-comments');
 
 //Bumping, Releasing tools
 const gulpGit = require('gulp-git');
@@ -80,11 +73,10 @@ const config = {
   unscopedLibraryName: 'ngx-wow',
   allSrc: 'src/**/*',
   allTs: 'src/**/!(*.spec).ts',
-  allSass: 'src/**/*.+(scss|sass)',
-  allHtml: 'src/**/*.html',
   demoDir: 'demo/',
   buildDir: 'tmp/',
   outputDir: 'dist/',
+  outputDemoDir: 'demo/dist/browser/',
   coverageDir: 'coverage/'
 };
 
@@ -116,11 +108,14 @@ const getPackageJsonVersion = () => {
 };
 
 const isOK = condition => {
+  if(condition === undefined){
+    return gulpUtil.colors.yellow('[SKIPPED]');
+  }
   return condition ? gulpUtil.colors.green('[OK]') : gulpUtil.colors.red('[KO]');
 };
 
 const readyToRelease = () => {
-  let isTravisPassing = /build #\d+ passed/.test(execSync('npm run check-travis').toString().trim()) ;
+  let isTravisPassing = /build #\d+ passed/.test(execSync('npm run check-travis').toString().trim());
   let onMasterBranch = execSync('git symbolic-ref --short -q HEAD').toString().trim() === 'master';
   let canBump = !!argv.version;
   let canGhRelease = argv.ghToken || process.env.CONVENTIONAL_GITHUB_RELEASER_TOKEN;
@@ -155,32 +150,6 @@ const execExternalCmd = (name, args, opts) => {
 };
 
 
-// Compile Sass to css
-const styleProcessor = (stylePath, ext, styleFile, callback) => {
-  /**
-   * Remove comments, autoprefixer, Minifier
-   */
-  const processors = [
-    stripInlineComments,
-    autoprefixer,
-    cssnano
-  ];
-
-  if (/\.(scss|sass)$/.test(ext[0])) {
-    let sassObj = sass.renderSync({ file: stylePath });
-    if (sassObj && sassObj['css']) {
-      let css = sassObj.css.toString('utf8');
-      postcss(processors).process(css).then(function (result) {
-        result.warnings().forEach(function (warn) {
-          gutil.warn(warn.toString());
-        });
-        styleFile = result.css;
-        callback(null, styleFile);
-      });
-    }
-  }
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // Cleaning Tasks
 /////////////////////////////////////////////////////////////////////////////
@@ -211,7 +180,7 @@ gulp.task('lint', (cb) => {
     gulp.src(config.allTs),
     gulpTslint(
       {
-
+        
         formatter: 'verbose',
         configuration: 'tslint.json'
       }),
@@ -223,7 +192,6 @@ gulp.task('lint', (cb) => {
 gulp.task('inline-templates', (cb) => {
   const options = {
     base: `${config.buildDir}`,
-    styleProcessor: styleProcessor,
     useRelativePaths: true
   };
   pump(
@@ -257,7 +225,7 @@ gulp.task('ng-compile',() => {
     });
 });
 
-// Lint, Prepare Build, , Sass to css, Inline templates & Styles and Ng-Compile
+// Lint, Prepare Build,  and Ng-Compile
 gulp.task('compile', (cb) => {
   runSequence('lint', 'pre-compile', 'inline-templates', 'ng-compile', cb);
 });
@@ -277,14 +245,14 @@ gulp.task('build-watch-no-tests', (cb) => {
   runSequence('compile', 'npm-package', 'rollup-bundle', cb);
 });
 
-// Watch changes on (*.ts, *.html, *.sass) and Re-build library
+// Watch changes on (*.ts, *.html) and Re-build library
 gulp.task('build:watch', ['build-watch'], () => {
-  gulp.watch([config.allTs, config.allHtml, config.allSass], ['build-watch']);
+  gulp.watch([config.allTs], ['build-watch']);
 });
 
-// Watch changes on (*.ts, *.html, *.sass) and Re-build library (without running tests)
+// Watch changes on (*.ts, *.html) and Re-build library (without running tests)
 gulp.task('build:watch-fast', ['build-watch-no-tests'], () => {
-  gulp.watch([config.allTs, config.allHtml, config.allSass], ['build-watch-no-tests']);
+  gulp.watch([config.allTs], ['build-watch-no-tests']);
 });
 
 
@@ -303,14 +271,15 @@ gulp.task('npm-package', (cb) => {
   //only copy needed properties from project's package json
   fieldsToCopy.forEach((field) => { targetPkgJson[field] = pkgJson[field]; });
 
-  targetPkgJson['main'] = `bundles/${config.unscopedLibraryName}.umd.js`;
-  targetPkgJson['module'] = `index.js`;
-  targetPkgJson['typings'] = `index.d.ts`;
+  targetPkgJson['main'] = `./bundles/${config.unscopedLibraryName}.umd.js`;
+  targetPkgJson['module'] = `./index.js`;
+  targetPkgJson['typings'] = `./index.d.ts`;
 
   // defines project's dependencies as 'peerDependencies' for final users
   targetPkgJson.peerDependencies = {};
   Object.keys(pkgJson.dependencies).forEach((dependency) => {
-    targetPkgJson.peerDependencies[dependency] = `^${pkgJson.dependencies[dependency]}`;
+    // versions are defined as '^' by default, but you can customize it by editing "dependenciesRange" in '.yo-rc.json' file
+    targetPkgJson.peerDependencies[dependency] = `>=${pkgJson.dependencies[dependency].replace(/[\^~><=]/,'')}`;
   });
 
   // copy the needed additional files in the 'dist' folder
@@ -334,7 +303,7 @@ gulp.task('rollup-bundle', (cb) => {
     // Base configuration.
     const es5Input = path.join(es5OutputFolder, `index.js`);
     const globals = {
-      // Angular dependencies
+      // Angular dependencies 
       '@angular/core': 'ng.core',
       '@angular/common': 'ng.common',
 
@@ -362,7 +331,7 @@ gulp.task('rollup-bundle', (cb) => {
       // ATTENTION:
       // Add any other dependency or peer dependency of your library here
       // This is required for UMD bundle users.
-      "wowjs": "wowjs"
+      'wowjs': 'wowjs'
     };
     const rollupBaseConfig = {
       name: _.camelCase(config.libraryName),
@@ -419,7 +388,7 @@ gulp.task('build:doc', (cb) => {
       tsconfig: 'src/tsconfig.lib.json',
       hideGenerator:true,
       disableCoverage: true,
-      output: `${config.demoDir}/dist/doc/`
+      output: `${config.outputDemoDir}/doc/`
     })
   ], cb);
 });
@@ -445,7 +414,7 @@ const execDemoCmd = (args,opts) => {
     return execCmd('ng', args, opts, `/${config.demoDir}`);
   }
   else{
-    gulpUtil.log(gulpUtil.colors.yellow(`No 'node_modules' found in '${config.demoDir}'. Installing dependencies for you..`));
+    gulpUtil.log(gulpUtil.colors.yellow(`No 'node_modules' found in '${config.demoDir}'. Installing dependencies for you...`));
     return helpers.installDependencies({ cwd: `${config.demoDir}` })
       .then(exitCode => exitCode === 0 ? execCmd('ng', args, opts, `/${config.demoDir}`) : Promise.reject())
       .catch(e => {
@@ -461,7 +430,11 @@ gulp.task('test:demo', () => {
 });
 
 gulp.task('serve:demo', () => {
-  return execDemoCmd('serve --preserve-symlinks --proxy-config proxy.conf.json', { cwd: `${config.demoDir}` });
+  return execDemoCmd('serve --preserve-symlinks --aot --proxy-config proxy.conf.json', { cwd: `${config.demoDir}` });
+});
+
+gulp.task('serve:demo-hmr', () => {
+  return execDemoCmd('serve --hmr -e=hmr --preserve-symlinks --aot --proxy-config proxy.conf.json', { cwd: `${config.demoDir}` });
 });
 
 gulp.task('build:demo', () => {
@@ -472,7 +445,7 @@ gulp.task('serve:demo-ssr',['build:demo'], () => {
   return execDemoCmd(`build --preserve-symlinks --prod --aot --build-optimizer --app ssr --output-hashing=none`, { cwd: `${config.demoDir}` })
   .then(exitCode => {
       if(exitCode === 0){
-        execCmd('webpack', '--config webpack.server.config.js', { cwd: `${config.demoDir}` }, `/${config.demoDir}`)
+        execCmd('webpack', '--config webpack.server.config.js --progress --colors', { cwd: `${config.demoDir}` }, `/${config.demoDir}`)
         .then(exitCode => exitCode === 0 ? execExternalCmd('node', 'dist/server.js', { cwd: `${config.demoDir}` }, `/${config.demoDir}`): Promise.reject(1));
       } else{
         Promise.reject(1);
@@ -485,7 +458,7 @@ gulp.task('build:demo-ssr',['build:demo'], () => {
   return execDemoCmd(`build --preserve-symlinks --prod --aot --build-optimizer --app ssr --output-hashing=none`, { cwd: `${config.demoDir}` })
   .then(exitCode => {
       if(exitCode === 0){
-        execCmd('webpack', '--config webpack.server.config.js', { cwd: `${config.demoDir}` }, `/${config.demoDir}`)
+        execCmd('webpack', '--config webpack.server.config.js --progress --colors', { cwd: `${config.demoDir}` }, `/${config.demoDir}`)
         .then(exitCode => exitCode === 0 ? execExternalCmd('node', 'dist/prerender.js', { cwd: `${config.demoDir}` }, `/${config.demoDir}`): Promise.reject(1));
       } else{
         Promise.reject(1);
@@ -495,7 +468,7 @@ gulp.task('build:demo-ssr',['build:demo'], () => {
 });
 
 gulp.task('push:demo', () => {
-  return execCmd('ngh',`--dir ${config.demoDir}/dist --message="chore(demo): :rocket: deploy new version"`);
+  return execCmd('ngh',`--dir ${config.outputDemoDir} --message="chore(demo): :rocket: deploy new version"`);
 });
 
 gulp.task('deploy:demo', (cb) => {
