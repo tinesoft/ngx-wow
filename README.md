@@ -136,7 +136,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // unsubscribe to cookieconsent observables to prevent memory leaks
+    // unsubscribe to WOW observables to prevent memory leaks
     this.wowSubscription.unsubscribe();
   }
 }
