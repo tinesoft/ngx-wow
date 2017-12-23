@@ -31,7 +31,7 @@ npm install --save wowjs
 >**Note**: If you are using `angular-cli` to build your app, make sure that `wowjs` is properly listed as a [global library](https://github.com/angular/angular-cli#global-library-installation), by editing your `angular-cli.json` as such:
 ```
       "scripts": [
-        "../node_modules/wowjs/dist/wowjs.js"
+        "../node_modules/wowjs/dist/wow.js"
       ],
 ```
 
