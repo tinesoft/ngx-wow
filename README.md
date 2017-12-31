@@ -40,7 +40,7 @@ Also make sure that [Animate.css](which is already installed and used internally
 * editing `angular-cli.json` as such:
 ```
       "styles": [
-        "../node_modules/animated.css/animate.css"
+        "../node_modules/animate.css/animate.css"
       ],
 ```
 * or by importing in your main `styles.scss` (or `styles.sass`, `styles.less`, `styles.styl`) file as such:
