@@ -35,6 +35,21 @@ npm install --save wowjs
       ],
 ```
 
+Also make sure that [Animate.css](which is already installed and used internally by `wowjs` to actually animate items) is listed as [global style](https://github.com/angular/angular-cli/wiki/stories-global-styles), by either:
+
+* editing `angular-cli.json` as such:
+```
+      "styles": [
+        "../node_modules/animated.css/animate.css"
+      ],
+```
+* or by importing in your main `styles.scss` (or `styles.sass`, `styles.less`, `styles.styl`) file as such:
+```sass
+...
+@import "~animate.css/animate.css";
+...
+```
+
 ##### SystemJS
 >**Note**:If you are using `SystemJS`, you should adjust your configuration to point to the UMD bundle.
 In your systemjs config file, `map` needs to tell the System loader where to look for `ngx-wow`:
@@ -46,7 +61,7 @@ map: {
 In your systemjs config file, `meta` needs to tell the System loader how to load `wowjs`:
 ```js
     meta: {
-    './node_modules/wowjs/dist/wow.js': {
+    './node_modules/wowjs/dist/wow.min.js': {
             format: 'amd'
         }
     }
@@ -56,7 +71,14 @@ In your index.html file, add script tag to load  `wowjs` globally:
     <!-- 1. Configure SystemJS -->
     <script src="system.config.js"></script>
     <!-- 2. Add WOW dependency-->
-    <script src="node_modules/wowjs/dist/wow.js"></script>
+    <script src="node_modules/wowjs/dist/wow.min.js"></script>
+```
+
+And add a reference to the `Animate.css` in the head section:
+```html
+<head>
+  <link rel="stylesheet" type="text/css" href="node_modules/animate.css/animate.min.css">
+</head>
 ```
 
 ---
@@ -115,7 +137,10 @@ import { Subscription }   from 'rxjs/Subscription';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  //keep refs to subscription to be abble to unsubscribe later
+  // keep refs to subscription to be abble to unsubscribe later
+  // (NOTE: unless you want to be notified when an item is revealed by WOW,
+  //  you absolutely don't need this line and related, for the library to work
+  // only the call to `this.wowService.init()` at some point is necessary
   private wowSubscription: Subscription;
 
   constructor(private router: Router, private wowService: NgwWowService){
@@ -128,7 +153,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // subscribe to WOW observable to react when an element is revealed
+    // you can subscribe to WOW observable to react when an element is revealed
     this.wowSubscription = this.wowService.itemRevealed$.subscribe(
       (item:HTMLElement) => {
         // do whatever you want with revealed element
@@ -136,7 +161,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // unsubscribe to WOW observables to prevent memory leaks
+    // unsubscribe (if necessary) to WOW observable to prevent memory leaks
     this.wowSubscription.unsubscribe();
   }
 }
