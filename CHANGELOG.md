@@ -1,3 +1,13 @@
+<a name="1.0.2"></a>
+## [1.0.2](https://github.com/tinesoft/ngx-wow/compare/v1.0.1...v1.0.2) (2017-12-31)
+
+
+### Bug Fixes
+
+* **animate.css:** update documentation about the necessary  setup of `animate.css` ([e0ed09d](https://github.com/tinesoft/ngx-wow/commit/e0ed09d))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/tinesoft/ngx-wow/compare/v1.0.0...v1.0.1) (2017-12-21)
 
