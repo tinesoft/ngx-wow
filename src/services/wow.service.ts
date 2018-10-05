@@ -43,13 +43,14 @@ export class NgwWowService {
   }
 
   init(config?: NgwWowConfig): void {
-    if (this.window) { // For Angular Universal suport
-      let conf = config || {};
+    // For Angular Universal support
+    if (this.window) {
+      let wowConfig = config || {};
       // Set callback hook:
-      conf.callback = () => this.itemRevealedSource.next();
+      wowConfig.callback = () => this.itemRevealedSource.next();
 
       // Initializes the library
-      new WOW(config).init();
+      new WOW(wowConfig).init();
     }
   }
 
