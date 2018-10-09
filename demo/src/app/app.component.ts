@@ -1,9 +1,9 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { filter } from 'rxjs/operators';
 import { NgwWowService} from 'ngx-wow';
 
-import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +12,11 @@ import 'rxjs/add/operator/filter';
 })
 export class AppComponent {
 
-  constructor(private router: Router, private wowService: NgwWowService, @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private wowService: NgwWowService) {
 
-    this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
+    this.router.events.pipe(
+      filter((event:RouterEvent) => event instanceof NavigationEnd)
+    ).subscribe(event => {
       if (isPlatformBrowser(this.platformId)) {
         window.scroll(0, 0);
         this.wowService.init(); // Load WoW animations when done navigating to page

@@ -12,11 +12,4 @@ import { WindowService, NgwWowService } from './services/index';
   ]
 })
 export class NgwWowModule {
-
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: NgwWowModule,
-      providers: [WindowService, NgwWowService]
-    };
-  }
 }

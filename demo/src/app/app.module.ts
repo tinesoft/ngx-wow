@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { NgwWowModule } from 'ngx-wow';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,10 +19,11 @@ import { AppComponent } from './app.component';
         // Add .withServerTransition() to support Universal rendering.
         // The application ID can be any identifier which is unique on
         // the page.
-        BrowserModule.withServerTransition({appId: 'ngx-wow-demo-id'}),
+        BrowserModule.withServerTransition({ appId: 'ngx-wow-demo-id' }),
+        TransferHttpCacheModule,
         FormsModule,
         HttpModule,
-        NgwWowModule.forRoot(),
+        NgwWowModule,
         AppRoutingModule,
         AppSharedModule,
         HomeModule

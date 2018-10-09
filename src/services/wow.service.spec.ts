@@ -19,7 +19,7 @@ describe('Service: NgwWow', () => {
 
   it('should create the service instance from module imports...', () => {
     TestBed.configureTestingModule({
-      imports: [NgwWowModule.forRoot()]
+      imports: [NgwWowModule]
     });
 
     let service = TestBed.get(NgwWowService); // inject the service from root injector
@@ -29,7 +29,7 @@ describe('Service: NgwWow', () => {
 
   it('should init WOW library when calling init() without config', () => {
     TestBed.configureTestingModule({
-      imports: [NgwWowModule.forRoot()]
+      imports: [NgwWowModule]
     });
     let service = TestBed.get(NgwWowService); // inject the service from root injector
 
@@ -39,7 +39,7 @@ describe('Service: NgwWow', () => {
 
   it('should emit itemRevealed$ event when calling callback() callback', () => {
     TestBed.configureTestingModule({
-      imports: [NgwWowModule.forRoot()]
+      imports: [NgwWowModule]
     });
 
     let service = TestBed.get(NgwWowService); // inject the service from root injector
