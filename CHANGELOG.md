@@ -1,3 +1,50 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/tinesoft/ngx-wow/compare/v1.0.2...v2.0.0) (2018-10-09)
+
+
+### Bug Fixes
+
+* **core:** item reveal events not fired if initialising WowService with no arguments ([ec56d5e](https://github.com/tinesoft/ngx-wow/commit/ec56d5e)), closes [#19](https://github.com/tinesoft/ngx-wow/issues/19)
+
+
+### Features
+
+* **core:** update to `Angular v6.x.x` and higher ([ccdab37](https://github.com/tinesoft/ngx-wow/commit/ccdab37))
+
+
+### BREAKING CHANGES
+
+* **core:** `forRoot()` on `NgwWowModule` has been removed as no longer necessary
+
+Before:
+
+```ts
+import {NgwWowModule} from 'ngx-wow';
+
+@NgModule({
+  declarations: [AppComponent, ...],
+  imports: [NgwWowModule.forRoot()],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+}
+```
+
+After:
+
+```ts
+import {NgwWowModule} from 'ngx-wow';
+
+@NgModule({
+  declarations: [AppComponent, ...],
+  imports: [NgwWowModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule {
+}
+
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/tinesoft/ngx-wow/compare/v1.0.1...v1.0.2) (2017-12-31)
 
