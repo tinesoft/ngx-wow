@@ -16,11 +16,13 @@
 View all the directives in action at https://tinesoft.github.io/ngx-wow
 
 ## Dependencies
-* [Angular](https://angular.io) (*requires* Angular 2 or higher, tested with 2.0.0)
+
+* [Angular](https://angular.io) (*requires* Angular 6+, [v1.0.2](https://github.com/tinesoft/ngx-wow/tree/v1.0.2) is the latest version for Angular < 6 )
 * [WOW JS](http://mynameismatthieu.com/WOW/) (*requires* WOW JS 1.1 or higher, tested with 1.1.3)
 
 
 ## Installation
+
 Install above dependencies via *npm*. In particular for `WOW JS`, run:
 ```shell
 npm install --save wowjs
@@ -28,6 +30,7 @@ npm install --save wowjs
 
 ---
 ##### Angular-CLI
+
 >**Note**: If you are using `angular-cli` to build your app, make sure that `wowjs` is properly listed as a [global library](https://github.com/angular/angular-cli#global-library-installation), by editing your `angular-cli.json` as such:
 ```
       "scripts": [
@@ -51,14 +54,18 @@ Also make sure that [Animate.css](which is already installed and used internally
 ```
 
 ##### SystemJS
+
 >**Note**:If you are using `SystemJS`, you should adjust your configuration to point to the UMD bundle.
 In your systemjs config file, `map` needs to tell the System loader where to look for `ngx-wow`:
+
 ```js
 map: {
   'ngx-wow': 'node_modules/ngx-wow/bundles/ngx-wow.min.js',
 }
 ```
+
 In your systemjs config file, `meta` needs to tell the System loader how to load `wowjs`:
+
 ```js
     meta: {
     './node_modules/wowjs/dist/wow.min.js': {
@@ -89,37 +96,25 @@ npm install --save ngx-wow
 ```
 
 Once installed you need to import the main module:
-```js
+```ts
 import { NgwWowModule } from 'ngx-wow';
 ```
-The only remaining part is to list the imported module in your application module. The exact method will be slightly
-different for the root (top-level) module for which you should end up with the code similar to (notice ` NgwWowModule.forRoot()`):
-```js
+
+```ts
 import { NgwWowModule } from 'ngx-wow';
 
 @NgModule({
   declarations: [AppComponent, ...],
-  imports: [NgwWowModule.forRoot(), ...],  
+  imports: [NgwWowModule, ...],  
   bootstrap: [AppComponent]
 })
 export class AppModule {
 }
 ```
 
-Other modules in your application can simply import ` NgwWowModule `:
-
-```js
-import { NgwWowModule } from 'ngx-wow';
-
-@NgModule({
-  declarations: [OtherComponent, ...],
-  imports: [NgwWowModule, ...], 
-})
-export class OtherModule {
-}
-```
 
 ## Usage
+
 Once the module is imported, you can use the `NgwWowService` in your component (i.e. `AppComponent`) to trigger reveal animation by calling `init()` or to be notified by WOW when an element is revealed.
 
 Here is how it works:
@@ -176,5 +171,5 @@ See [WOW.js Documentation](https://github.com/matthieua/WOW#advanced-usage) to s
 
 ## License
 
-Copyright (c) 2017 Tine Kondo. Licensed under the MIT License (MIT)
+Copyright (c) 2018 Tine Kondo. Licensed under the MIT License (MIT)
 

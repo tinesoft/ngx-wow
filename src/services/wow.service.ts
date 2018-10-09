@@ -1,28 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 
 import { NgwWowConfig } from '../models/index';
 import { WindowService } from './window.service';
 
 /**
- * Basic type to represent the `WOW` object from `WOW.js` library.
- */
-export interface WOW {
-  /**
-     * Initializes the WOW.js library
-     * @param config the custom configuration to use
-     */
-  init(config?: NgwWowConfig): void;
-}
-/**
  * Type definition for the `WOW` object from `WOW.js` library.
  */
-declare var WOW: {
-  new (config?: NgwWowConfig): WOW;
+declare class WOW {
+  constructor (config?: NgwWowConfig);
+  /**
+   * Initializes the WOW.js library
+   * @param config the custom configuration to use
+   */
+  init(config?: NgwWowConfig): void;
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NgwWowService {
 
   // Window Object
@@ -43,9 +39,8 @@ export class NgwWowService {
   }
 
   init(config?: NgwWowConfig): void {
-    // For Angular Universal support
-    if (this.window) {
-      let wowConfig = config || {};
+    if (this.window) { // For Angular Universal suport
+      const wowConfig = config || {};
       // Set callback hook:
       wowConfig.callback = () => this.itemRevealedSource.next();
 
