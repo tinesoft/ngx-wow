@@ -17,7 +17,7 @@ View all the directives in action at https://tinesoft.github.io/ngx-wow
 
 ## Dependencies
 
-* [Angular](https://angular.io) (*requires* Angular 6+, [v1.0.2](https://github.com/tinesoft/ngx-wow/tree/v1.0.2) is the latest version for Angular < 6 )
+* [Angular](https://angular.io) (*requires* Angular 6+(tested with `v6.1.9`), [v1.0.2](https://github.com/tinesoft/ngx-wow/tree/v1.0.2) is the latest version for Angular < 6 )
 * [WOW JS](http://mynameismatthieu.com/WOW/) (*requires* WOW JS 1.1 or higher, tested with 1.1.3)
 
 

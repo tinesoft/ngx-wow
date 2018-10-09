@@ -141,5 +141,8 @@
       }
     }
   },
-  "defaultProject": "ngx-wow-demo"
+  "defaultProject": "ngx-wow-demo",
+  "cli": {
+    "packageManager": "npm"
+  }
 }
