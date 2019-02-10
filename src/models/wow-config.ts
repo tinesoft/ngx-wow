@@ -34,5 +34,5 @@ export class NgwWowConfig {
    */
   callback?: (box: HTMLElement) => void;
 
-  scrollContainer?: HTMLElement;
+  scrollContainer?: string;
 }
