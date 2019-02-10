@@ -1,3 +1,13 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/tinesoft/ngx-wow/compare/v2.0.0...v2.0.1) (2019-02-10)
+
+
+### Bug Fixes
+
+* **typings:** change typing for `scrollContainer` (now `string` instead of `HTMLElement`) ([00c57f7](https://github.com/tinesoft/ngx-wow/commit/00c57f7))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/tinesoft/ngx-wow/compare/v1.0.2...v2.0.0) (2018-10-09)
 
