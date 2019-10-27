@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="256px" width="256px" style="text-align: center;" src="https://cdn.rawgit.com/tinesoft/ngx-wow/master/demo/src/assets/logo.svg">
+  <img height="256px" width="256px" style="text-align: center;" src="https://cdn.jsdelivr.net/gh/tinesoft/ngx-wow@master/demo/src/assets/logo.svg">
 </p>
 
 # ngx-wow - Angular module for WOW.js.
