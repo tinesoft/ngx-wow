@@ -124,6 +124,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { NgwWowService } from 'ngx-wow';
 import { Subscription }   from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'app-root',
@@ -139,11 +140,13 @@ export class AppComponent implements OnInit, OnDestroy {
   private wowSubscription: Subscription;
 
   constructor(private router: Router, private wowService: NgwWowService){
-    this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
-      // Reload WoW animations when done navigating to page,
-      // but you are free to call it whenever/wherever you like
-      this.wowService.init(); 
-    });
+    this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe(event => {
+        // Reload WoW animations when done navigating to page,
+        // but you are free to call it whenever/wherever you like
+        this.wowService.init();
+      });
   
   }
 
